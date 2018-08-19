@@ -1,0 +1,22 @@
+{
+  "name": "rubiksrace",
+  "version": "1.0.0",
+  "description": "Rubik's Race multiplayer board game",
+  "main": "server/app.js",
+  "scripts": {
+    "start": "node server/app"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/javierorbe/rubiksrace.git"
+  },
+  "author": "Javier Orbe",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/javierorbe/rubiksrace/issues"
+  },
+  "homepage": "https://github.com/javierorbe/rubiksrace#readme",
+  "dependencies": {
+    "express": "^4.16.3"
+  }
+}
