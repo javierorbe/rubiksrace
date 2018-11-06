@@ -20,8 +20,8 @@ app.get('/', (req, res) => {
 // Start server
 server.listen(port, () => console.log(`Listening on port ${port}`));
 
-const sockets = new Map(); // <number, Socket> [playerId, socket]
-const players = new Map(); // <number, Game>   [playerId, game]
+const sockets = new Map(); // <number, Socket> (playerId, socket)
+const players = new Map(); // <number, Game>   (playerId, game)
 const games = new Set(); //   <Game>
 
 /**
@@ -70,12 +70,12 @@ io.on('connection', (socket) => {
         sockets.get(opponentId).emit('start_game', gameData);
       }
     } else {
-      socket.emit('not_exist_pin');
+      socket.emit('not_exist_id');
     }
   });
 
   /** The player clicks on a tile that can be moved. */
-  socket.on('tile_change', (data) => {
+  socket.on('move_tile', (data) => {
     if (data.x !== undefined && data.y !== undefined) {
       if (players.has(id)) {
         players.get(id).move(id, data.x, data.y);
@@ -94,20 +94,20 @@ io.on('connection', (socket) => {
 
     // Check if one of the players has won
     if (winData !== -1) {
-      const opponentPin = game.id1 === id ? game.id2 : game.id1;
+      const opponentId = game.id1 === id ? game.id2 : game.id1;
 
       if (winData === id) {
         socket.emit('game_end', { win: true });
-        sockets.get(opponentPin).emit('game_end', { win: false });
+        sockets.get(opponentId).emit('game_end', { win: false });
       } else {
         socket.emit('game_end', { win: false });
-        sockets.get(opponentPin).emit('game_end', { win: true });
+        sockets.get(opponentId).emit('game_end', { win: true });
       }
 
       // Clear the game from the data objects
       games.delete(game);
       players.delete(id);
-      players.delete(opponentPin);
+      players.delete(opponentId);
     }
   });
 
@@ -115,16 +115,16 @@ io.on('connection', (socket) => {
     if (players.has(id)) {
       const game = players.get(id);
 
-      let opponentPin = game.id1;
+      let opponentId = game.id1;
       if (game.id1 === id) {
-        opponentPin = game.id2;
+        opponentId = game.id2;
       }
 
-      sockets.get(opponentPin).emit('opponent_disconnect');
+      sockets.get(opponentId).emit('opponent_disconnected');
 
       games.delete(game);
       players.delete(id);
-      players.delete(opponentPin);
+      players.delete(opponentId);
     }
 
     sockets.delete(id);

@@ -53,7 +53,7 @@
     }
   }
 
-  const tileSide = 64;
+  const TILE_SIDE = 64;
 
   class Board {
     /**
@@ -80,7 +80,7 @@
       ctx.lineWidth = 4;
 
       ctx.fillStyle = '#000000';
-      ctx.fillRect(0, 0, tileSide * 5, tileSide * 5);
+      ctx.fillRect(0, 0, TILE_SIDE * 5, TILE_SIDE * 5);
 
       for (let i = 0; i < 5; i++) {
         for (let j = 0; j < 5; j++) {
@@ -92,19 +92,19 @@
           // Tile inner color
           ctx.fillStyle = getColorById(this.table[j][i]);
           ctx.fillRect(
-            (i * tileSide) + 4,
-            (j * tileSide) + 4,
-            tileSide - 8,
-            tileSide - 8
+            (i * TILE_SIDE) + 4,
+            (j * TILE_SIDE) + 4,
+            TILE_SIDE - 8,
+            TILE_SIDE - 8
           );
 
           ctx.strokeStyle = getDarkColorById(this.table[j][i]);
           // Tile border
           ctx.strokeRect(
-            (i * tileSide) + 4,
-            (j * tileSide) + 4,
-            tileSide - 8,
-            tileSide - 8
+            (i * TILE_SIDE) + 4,
+            (j * TILE_SIDE) + 4,
+            TILE_SIDE - 8,
+            TILE_SIDE - 8
           );
         }
       }
@@ -138,13 +138,14 @@
     /**
      * Move the tile at (x, y) position to the empty position,
      * and set the new empty position.
-     * Emit the action.
+     * Emit the action through the socket.
      *
+     * @param {Socket} socket Socket.IO connection.
      * @param {number} x The x value of the tile.
      * @param {number} y The y value of the tile.
      */
     move(socket, x, y) {
-      socket.emit('tile_change', { x, y });
+      socket.emit('move_tile', { x, y });
 
       this.table[this.eptY][this.eptX] = this.table[y][x];
       this.table[y][x] = -1;
@@ -159,7 +160,7 @@
     /**
      * Test if the clicked tile can be moved and move it.
      *
-     * @param {Socket} socket SocketIO connection.
+     * @param {Socket} socket Socket.IO connection.
      * @param {number} x X value of the clicked tile.
      * @param {number} y Y value of the clicked tile.
      */
@@ -182,7 +183,7 @@
     testWin() {
       for (let i = 0; i < 3; i++) {
         for (let j = 0; j < 3; j++) {
-          // i, j: +1 because the pattern is in the center of the board
+          // +1 because the pattern is in the center of the board
           if (this.table[j + 1][i + 1] !== this.goal[j][i]) {
             return false;
           }
@@ -202,26 +203,26 @@
       ctx.lineWidth = 4;
 
       ctx.fillStyle = '#000000';
-      ctx.fillRect(0, 0, tileSide * 5, tileSide * 5);
+      ctx.fillRect(0, 0, TILE_SIDE * 5, TILE_SIDE * 5);
 
       for (let i = 0; i < 3; i++) {
         for (let j = 0; j < 3; j++) {
           // Tile inner color
           ctx.fillStyle = getColorById(goal[j][i]);
           ctx.fillRect(
-            (i * tileSide) + 4 + tileSide,
-            (j * tileSide) + 4 + tileSide,
-            tileSide - 8,
-            tileSide - 8
+            (i * TILE_SIDE) + 4 + TILE_SIDE,
+            (j * TILE_SIDE) + 4 + TILE_SIDE,
+            TILE_SIDE - 8,
+            TILE_SIDE - 8
           );
 
           // Tile border
           ctx.strokeStyle = getDarkColorById(goal[j][i]);
           ctx.strokeRect(
-            (i * tileSide) + 4 + tileSide,
-            (j * tileSide) + 4 + tileSide,
-            tileSide - 8,
-            tileSide - 8
+            (i * TILE_SIDE) + 4 + TILE_SIDE,
+            (j * TILE_SIDE) + 4 + TILE_SIDE,
+            TILE_SIDE - 8,
+            TILE_SIDE - 8
           );
         }
       }
