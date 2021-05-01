@@ -1,6 +1,6 @@
 # Rubik's Race
 
-Rubik's Race multiplayer board game with Node.js
+Rubik's Race two-player board game. Made with Node.js.
 
 
 Try it at: https://rubiksrace.herokuapp.com
